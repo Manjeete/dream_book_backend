@@ -1,4 +1,4 @@
-const { User, Admin } = require('../models');
+const { User, Admin, Author, Employee } = require('../models');
 
 async function createUser(user) {
   return User.create(user);
@@ -12,8 +12,18 @@ async function createAdmin(admin) {
   return await Admin.create(admin)
 }
 
+async function createAuthor(author) {
+  return await Author.create(author)
+}
+
+async function createEmployee(employee) {
+  return await Employee.create(employee)
+}
+
 module.exports = {
   createUser,
   getUserByFirebaseUId,
-  createAdmin
+  createAdmin,
+  createAuthor,
+  createEmployee
 };

@@ -11,13 +11,13 @@ const router = express.Router();
 
 router.get(
   '/',
-  firebaseAuth('Admin'),
+  firebaseAuth('Admin,Employee'),
   userController.getAllUsers
 );
 
 router.get(
   '/:id',
-  firebaseAuth('Admin'),
+  firebaseAuth('Admin,Employee,Author'),
   userController.getUserById
 );
 
@@ -29,18 +29,21 @@ router.get(
 
 // for updating userDetails
 router.patch(
-  '/update/me',
-  fileUploadService.multerUpload.single('profilePic'),
-  firebaseAuth('All'),
-  validate(userValidation.updateDetails),
+  '/:id',
+  firebaseAuth('Admin,Employee,Author'),
   userController.updateUser
 );
 
 router.patch(
-  '/:userId',
-  fileUploadService.multerUpload.single('profilePic'),
-  firebaseAuth('Admin'),
-  userController.updateUserByAdmin
+  '/author/:userId',
+  firebaseAuth('Admin,Employee,Author'),
+  userController.updateAuthor
+);
+
+router.patch(
+  '/employee/:userId',
+  firebaseAuth('Admin,Employee,Author'),
+  userController.updateEmployee
 );
 
 router.patch(
@@ -48,14 +51,6 @@ router.patch(
   firebaseAuth('Admin'),
   validate(userValidation.blockUser),
   userController.blockUnblockUser
-);
-
-// for updating specific user preferences
-router.patch(
-  '/updatePreferences',
-  validate(userValidation.updateUserPreferences),
-  firebaseAuth('All'),
-  userController.updatePreferences
 );
 
 // for deleting a user

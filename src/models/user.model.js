@@ -66,6 +66,13 @@ const authorSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const employeeSchema = new mongoose.Schema(
+  {
+
+  },
+  { timestamps: true }
+);
+
 const adminSchema = new mongoose.Schema(
   {
     permissions: {
@@ -94,10 +101,12 @@ adminSchema.plugin(paginate);
 
 const User = mongoose.model('User', userSchema);
 const Author = User.discriminator('Author', authorSchema);
+const Employee = User.discriminator('Employee', employeeSchema);
 const Admin = User.discriminator('Admin', adminSchema);
 
 module.exports = {
   User,
   Admin,
-  Author
+  Author,
+  Employee
 };

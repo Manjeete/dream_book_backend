@@ -1,4 +1,4 @@
-const { User, Admin } = require('../models');
+const { User, Admin, Author, Employee } = require('../models');
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const { getAllData } = require("../utils/getAllData");
@@ -28,19 +28,23 @@ async function updateUserById(id, newDetails, profileImage = null) {
   const user = await User.findById(id);
   userValidator(user);
   let updates = { ...newDetails };
-  if (profileImage) {
-    const [profilePic] = await fileUploadService.s3Upload([profileImage], 'profilePics').catch(err => {
-      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Failed to upload profile picture');
-    });
-    if (user.profilePic) {
-      const oldPicKey = user.profilePic.key;
-      await fileUploadService
-        .s3Delete(oldPicKey)
-        .catch(err => console.log('Failed to delete profile picture', oldPicKey));
-    }
-    updates = { ...updates, profilePic };
-  }
   return await User.findByIdAndUpdate(id, updates, { new: true });
+
+}
+
+async function updateAuthor(id, newDetails) {
+  const user = await User.findById(id);
+  userValidator(user);
+  let updates = { ...newDetails };
+  return await Author.findByIdAndUpdate(id, updates, { new: true });
+
+}
+
+async function updateEmployee(id, newDetails) {
+  const user = await User.findById(id);
+  userValidator(user);
+  let updates = { ...newDetails };
+  return await Employee.findByIdAndUpdate(id, updates, { new: true });
 
 }
 
@@ -75,5 +79,7 @@ module.exports = {
   updateUserById,
   deleteUserById,
   updatePreferencesById,
-  getAllUsers
+  getAllUsers,
+  updateAuthor,
+  updateEmployee
 };

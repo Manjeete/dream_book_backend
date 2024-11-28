@@ -1,7 +1,8 @@
 const { authService, favouriteService, userService } = require('../services');
 const catchAsync = require('../utils/catchAsync');
-const generateRandomUserId = require("../utils/generateRandomUserId")
 const generateReferralCode = require("../utils/generateReferralCode")
+const admin = require("firebase-admin");
+
 
 const createNewUserObject = newUser => ({
   name: newUser.name,
@@ -23,11 +24,9 @@ const registerUser = catchAsync(async (req, res) => {
     // } else if (!req.newUser.email_verified) {
     //   res.status(401).send({ message: "Email not verified" });
   } else {
-    let userId = generateRandomUserId()
     const userObj = {
       ...createNewUserObject(req.newUser),
       ...req.body,
-      userId,
     };
     let user = null;
     switch (req.routeType) {
@@ -45,7 +44,42 @@ const registerUser = catchAsync(async (req, res) => {
   }
 });
 
+const addAuthor = catchAsync(async (req, res) => {
+  let fir = await admin.auth().createUser({
+    email: req.body.email,
+    password: req.body.password,
+  })
+  let author = await authService.createAuthor({
+    firebaseUid: fir.uid,
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    firebaseSignInProvider: "email",
+  })
+
+  res.status(200).send({ status: true, message: "Author added successfully", data: author });
+});
+
+const addEmployee = catchAsync(async (req, res) => {
+  let fir = await admin.auth().createUser({
+    email: req.body.email,
+    password: req.body.password,
+  })
+  let author = await authService.createEmployee({
+    firebaseUid: fir.uid,
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    firebaseSignInProvider: "email",
+    role: "employee"
+  })
+
+  res.status(200).send({ status: true, message: "Author added successfully", data: author });
+});
+
 module.exports = {
   loginUser,
   registerUser,
+  addAuthor,
+  addEmployee
 };

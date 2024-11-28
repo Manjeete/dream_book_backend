@@ -14,17 +14,25 @@ router.post('/login', firebaseAuth('All'), authController.loginUser);
 router.post(
   '/register',
   firebaseAuth('User'),
-  // fileUploadService.multerUpload.single('profilePic'),
-  // validate(authValidation.register),
   authController.registerUser
 );
 
 router.post(
   '/register-admin',
   firebaseAuth('Admin'),
-  // fileUploadService.multerUpload.single('profilePic'),
-  // validate(authValidation.register),
   authController.registerUser
+);
+
+router.post(
+  '/add-author',
+  firebaseAuth('Admin,Employee'),
+  authController.addAuthor
+);
+
+router.post(
+  '/add-employee',
+  firebaseAuth('Admin'),
+  authController.addEmployee
 );
 
 router.post("/generate-token/:uid", generateToken);

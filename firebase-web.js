@@ -2,13 +2,13 @@
 const { initializeApp } = require("firebase/app");
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBsVFB6o1iKHwjBxbdRR6PX7VZQ6zGEHMw",
-    authDomain: "staging-capella.firebaseapp.com",
-    projectId: "staging-capella",
-    storageBucket: "staging-capella.firebasestorage.app",
-    messagingSenderId: "475463058626",
-    appId: "1:475463058626:web:daa26b74d4aff8293de75b",
-    measurementId: "G-C86MK3SNXM"
+    apiKey: "AIzaSyBX2nPIiEtWIW9ihNQIikQl1v2_DDt7OJc",
+    authDomain: "staging-dream-book.firebaseapp.com",
+    projectId: "staging-dream-book",
+    storageBucket: "staging-dream-book.firebasestorage.app",
+    messagingSenderId: "649205651583",
+    appId: "1:649205651583:web:927139a12dce9ab4e8c74a",
+    measurementId: "G-PB3LDTG9C2"
 };
 
 // Initialize Firebase

@@ -3,7 +3,6 @@ const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { userService } = require('../services');
 
-
 const getAllUsers = catchAsync(async (req, res) => {
   const populateConfig = [
   ]
@@ -14,11 +13,9 @@ const getAllUsers = catchAsync(async (req, res) => {
     let search = req.query.search;
     delete req.query.search;
     let qStringName = searchQuery(search, "name");
-    let qStringPhone = searchQuery(search, "phone");
     let qStringEmail = searchQuery(search, "email");
-    req.query = { ...req.query, $or: qStringName.concat(qStringPhone).concat(qStringEmail) }
+    req.query = { ...req.query, $or: qStringName.concat(qStringEmail) }
   }
-  req.query.role = 'user';
   const users = await userService.getAllUsers(req.query, populateConfig)
 
   res.status(200).json({
@@ -43,9 +40,14 @@ const updateUser = catchAsync(async (req, res) => {
   res.status(200).json({ status: true, message: 'Your details are updated', data: updatedUser });
 });
 
-const updateUserByAdmin = catchAsync(async (req, res) => {
-  const updatedUser = await userService.updateUserById(req.params.userId, req.body, req.file);
-  res.status(200).json({ status: true, message: 'Your details are updated', data: updatedUser });
+const updateAuthor = catchAsync(async (req, res) => {
+  const updatedAuthor = await userService.updateAuthor(req.params.userId, req.body);
+  res.status(200).json({ status: true, message: 'Author details are updated', data: updatedAuthor });
+});
+
+const updateEmployee = catchAsync(async (req, res) => {
+  const updatedAuthor = await userService.updateEmployee(req.params.userId, req.body);
+  res.status(200).json({ status: true, message: 'Employee details are updated', data: updatedAuthor });
 });
 
 const blockUnblockUser = catchAsync(async (req, res) => {
@@ -82,6 +84,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   getMe,
-  updateUserByAdmin,
-  blockUnblockUser
+  blockUnblockUser,
+  updateAuthor,
+  updateEmployee
 };
