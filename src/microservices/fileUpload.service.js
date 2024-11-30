@@ -1,7 +1,7 @@
 const uuid = require('uuid').v4;
 const multer = require('multer');
 const storage = multer.memoryStorage();
-const {getSignedUrl} = require('@aws-sdk/s3-request-presigner');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const {
   S3Client,
   PutObjectCommand,
@@ -11,14 +11,14 @@ const {
 } = require('@aws-sdk/client-s3');
 
 const config = require('../config/config');
-const {fileTypes} = require('../constants');
+const { fileTypes } = require('../constants');
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
-const {accessKeyId, region, secretAccessKey, name} = config.aws.s3;
+const { accessKeyId, region, secretAccessKey, name } = config.aws.s3;
 
 const s3client = new S3Client({
   region,
-  credentials: {accessKeyId, secretAccessKey},
+  credentials: { accessKeyId, secretAccessKey },
 });
 
 async function fileFilter(req, file, cb) {
@@ -52,7 +52,7 @@ async function getObjectURL(Key, signedUrl = false, expiresIn = 3600) {
     Key,
     Bucket: name,
   });
-  const url = await getSignedUrl(s3client, command, {expiresIn});
+  const url = await getSignedUrl(s3client, command, { expiresIn });
   return {
     key: Key,
     url: signedUrl ? url : url.split('?')[0],
@@ -60,7 +60,7 @@ async function getObjectURL(Key, signedUrl = false, expiresIn = 3600) {
 }
 
 async function s3Delete(Key) {
-  const command = new DeleteObjectCommand({Key, Bucket: name});
+  const command = new DeleteObjectCommand({ Key, Bucket: name });
   return s3client.send(command);
 }
 
@@ -81,7 +81,7 @@ async function s3Move(sourceKey, destinationFolderName, privateDestination = fal
   return result;
 }
 
-async function s3Upsert({file, existingFileKey = null, folder, private = false}) {
+async function s3Upsert({ file, existingFileKey = null, folder, private = false }) {
   if (!existingFileKey && !folder)
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
@@ -108,6 +108,7 @@ async function s3Upload(files, folder = 'uploads', private = false, expiresIn = 
       Key: generateKey(folder, private),
       Body: file.buffer,
       ContentType: file.mimetype,
+      ACL: 'public-read'
     };
   });
 
