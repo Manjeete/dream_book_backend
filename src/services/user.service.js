@@ -8,11 +8,12 @@ const { fileUploadService } = require('../microservices');
 const userValidator = user => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found.');
-  } else if (user.isDeleted) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'User account has been deleted.');
-  } else if (user.isBlocked) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'User has been blocked.');
   }
+  // else if (user.isDeleted) {
+  //   throw new ApiError(httpStatus.FORBIDDEN, 'User account has been deleted.');
+  // } else if (user.isBlocked) {
+  //   throw new ApiError(httpStatus.FORBIDDEN, 'User has been blocked.');
+  // }
 };
 
 async function getUserById(id) {

@@ -50,14 +50,21 @@ const bookSchema = new mongoose.Schema(
             type: Number,
             default: 0
         },
-        platform: {
-            type: [String],
-            enum: ["amazon", "flipcart", "dream"],
-            default: "amazon"
-        },
-        royalty: {
-            type: Number,
-            default: 0
+        platforms: {
+            type: [
+                {
+                    platform: {
+                        type: String,
+                        enum: ["amazon", "flipcart", "dream"],
+                        required: true
+                    },
+                    royalty: {
+                        type: Number,
+                        default: 0
+                    }
+                }
+            ],
+            default: []
         },
         status: {
             type: String,

@@ -10,7 +10,7 @@ async function addBook(book) {
 }
 
 async function getBookById(id) {
-    return await Book.findById(id);
+    return await Book.findById(id).populate({ path: "author" });
 }
 
 // async function updateUserById(id, newDetails, profileImage = null) {

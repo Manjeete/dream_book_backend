@@ -5,6 +5,9 @@ const { bookService } = require('../services');
 const { fileUploadService } = require('../microservices');
 
 const addBook = catchAsync(async (req, res) => {
+    if (req.body.platforms) {
+        req.body.platforms = JSON.parse(req.body.platforms);
+    }
     if (req.file) {
         const [coverImage] = await fileUploadService.s3Upload([req.file], 'coverImages').catch(err => {
             throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Failed to upload profile picture');
@@ -68,6 +71,9 @@ const updateBookById = catchAsync(async (req, res) => {
             throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Failed to upload profile picture');
         });
         req.body = { ...req.body, coverImage }
+    }
+    if (req.body.platforms) {
+        req.body.platforms = JSON.parse(req.body.platforms);
     }
     const updatedBook = await bookService.updateBookById(req.params.id, req.body);
     return res.status(200).json({
