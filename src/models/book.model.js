@@ -55,7 +55,7 @@ const bookSchema = new mongoose.Schema(
                 {
                     platform: {
                         type: String,
-                        enum: ["amazon", "flipcart", "dream"],
+                        enum: ["amazon", "flipkart", "dream"],
                         required: true
                     },
                     royalty: {
@@ -82,3 +82,5 @@ const Book = mongoose.model('Book', bookSchema, 'Book');
 module.exports = {
     Book
 };
+
+platforms: [{ "platform": "amazon", "royality": 50 }]
