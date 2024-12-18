@@ -55,7 +55,7 @@ const bookSchema = new mongoose.Schema(
                 {
                     platform: {
                         type: String,
-                        enum: ["amazon", "flipkart", "dream"],
+                        enum: ["amazon", "flipkart", "dream", "kindle"],
                         required: true
                     },
                     royalty: {
