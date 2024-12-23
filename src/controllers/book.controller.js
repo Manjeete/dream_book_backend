@@ -20,6 +20,7 @@ const addBook = catchAsync(async (req, res) => {
 });
 
 const getAllBooks = catchAsync(async (req, res) => {
+    const user = req.user;
     const populateConfig = [
         { path: "author", select: "_id name email" }
     ]
@@ -33,6 +34,9 @@ const getAllBooks = catchAsync(async (req, res) => {
         let qStringSubTitle = searchQuery(search, "subtitle");
         let qStringIsbnNumber = searchQuery(search, "isbnNumber");
         req.query = { ...req.query, $or: qStringTitile.concat(qStringSubTitle).concat(qStringIsbnNumber) }
+    }
+    if (user.role === "author") {
+        req.query.author = user._id
     }
     const books = await bookService.getAllBooks(req.query, populateConfig)
 
